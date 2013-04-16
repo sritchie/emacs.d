@@ -21,7 +21,37 @@ pretty lambdas in Haskell code
 
 Haskell mode hook
 #+begin_src emacs-lisp
-  (add-hook 'haskell-mode-hook 'run-starter-kit-coding-hook)
-  (when (window-system)
-    (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
+    (add-to-list 'load-path (concat dotfiles-dir "haskell"))
+    (require 'hs-lint)
+    (require 'haskell-ac)
+  
+    (defun my-haskell-mode-hook ()
+      "hs-lint binding, plus autocompletion and paredit."
+      (local-set-key "\C-cl" 'hs-lint)
+      (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
+      (setq ac-sources
+            (append '(ac-source-yasnippet
+                      ac-source-abbrev
+                      ac-source-words-in-buffer
+                      my/ac-source-haskell)
+                    ac-sources))
+      (dolist (x '(haskell literate-haskell))
+        (add-hook
+         (intern (concat (symbol-name x)
+                         "-mode-hook"))
+         'turn-on-paredit)))
+    
+    (add-hook 'haskell-mode-hook 'run-starter-kit-coding-hook)
+    (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
+    (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+    (when (window-system)
+      (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+    (add-to-list 'completion-ignored-extensions ".hi")
+  
+  (custom-set-faces
+   '(flymake-errline ((((class color)) (:underline "red"))))
+   '(flymake-warnline ((((class color)) (:underline "yellow")))))  
+  
 #+end_src

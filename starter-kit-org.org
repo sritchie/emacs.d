@@ -63,12 +63,18 @@ contains an up to date list of the currently supported languages.
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (sh . t)))
+     (sh . t)
+     (R . t)
+     (ruby . t)
+     (latex . t)
+     (haskell . t)
+     (clojure . t)
+     (scala . t)))
 #+end_src
 
 You are encouraged to add the following to your personal configuration
 although it is not added by default as a security precaution.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (setq org-confirm-babel-evaluate nil)
 #+end_src
 
@@ -84,6 +90,42 @@ much more like reading and editing of code using its major mode.
 #+begin_src emacs-lisp
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
+#+end_src
+
+And, some basic ones for my blog:
+
+#+begin_src emacs-lisp
+(setq org-babel-default-header-args:clojure
+      '((:results . "silent") (:tangle . "yes")))
+
+(setq org-publish-project-alist
+      '(("org-samritchie"
+         ;; Path to your org files.
+         :base-directory "~/sritchie.github.com/org/"
+         :base-extension "org"
+
+         ;; Path to your Jekyll project.
+         :publishing-directory "~/sritchie.github.com/"
+         :recursive t
+         :publishing-function org-publish-org-to-html
+         :headline-levels 6
+         :html-extension "html"
+         :body-only t ;; Only export section between <body> </body>
+         :exclude "_drafts/*"
+
+         :section-numbers nil
+         :table-of-contents nil
+
+         :author "Sam Ritchie"
+         :email "sritchie@twitter.com")
+
+        ("org-static-sam"
+         :base-directory "~/sritchie.github.com/org/"
+         :base-extension "css\\|js\\|png\\|jpg\\|ico\\|gif\\|pdf\\|mp3\\|flac\\|ogg\\|swf\\|php\\|markdown\\|md\\|html\\|htm\\|sh\\|xml\\|gz\\|bz2\\|vcf\\|zip\\|txt\\|tex\\|otf\\|ttf\\|eot\\|rb\\|yml\\|htaccess\\|gitignore"
+         :publishing-directory "~/sritchie.github.com/"
+         :recursive t
+         :publishing-function org-publish-attachment)
+        ("sam" :components ("org-samritchie" "org-static-sam"))))
 #+end_src
 
 ** The Library of Babel

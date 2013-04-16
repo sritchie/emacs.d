@@ -7,6 +7,7 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 [[http://www.emacswiki.org/emacs/CategoryEshell][Eshell]] is a great shell.
 
 #+begin_src emacs-lisp
+  
   (setq eshell-cmpl-cycle-completions nil
         eshell-save-history-on-exit t
         eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
@@ -19,6 +20,7 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
        ;; TODO: for some reason requiring this here breaks it, but
        ;; requiring it after an eshell session is started works fine.
        ;; (require 'eshell-vc)
+       (set-exec-path-from-shell-PATH)
        (setenv "PAGER" "cat")
        ; (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
        (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook

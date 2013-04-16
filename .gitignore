@@ -32,6 +32,12 @@ url/*
 *pdf
 *txt
 
+## Allow some .el files for now:
+!thrift-mode/*.el
+!haskell/*.el
+!ensime/*.el
+!window-numbering/*.el
+
 ## org stuff
 .org-id-locations
 

@@ -263,11 +263,19 @@ interested in the actual code implementing the starter kit.
           '(("gnu"         . "http://elpa.gnu.org/packages/")
             ("original"    . "http://tromey.com/elpa/")
             ("org"         . "http://orgmode.org/elpa/")
-            ("marmalade"   . "http://marmalade-repo.org/packages/")))
+            ("marmalade"   . "http://marmalade-repo.org/packages/")
+            ("elpa"        . "http://tromey.com/elpa/")
+            ("melpa"       . "http://melpa.milkbox.net/packages/")))
     (package-initialize)
     
     (defvar starter-kit-packages
-      (list 'yasnippet-bundle)
+      (list 'yasnippet-bundle
+            'paredit
+            'scala-mode2
+            'clojure-mode
+            'org
+            'haskell-mode
+            'midje-mode)
       "Libraries that should be installed by default.")
     
     (unless package-archive-contents
@@ -275,6 +283,7 @@ interested in the actual code implementing the starter kit.
     (dolist (package starter-kit-packages)
       (unless (package-installed-p package)
         (package-install package)))
+    
   #+end_src
 
 - Functions for loading other parts of the starter kit
@@ -341,6 +350,14 @@ interested in the actual code implementing the starter kit.
    :PROPERTIES:
    :CUSTOM_ID: starter-kit-core
    :END:
+
+
+First, set up the right load path:
+#+begin_src emacs-lisp
+(setq dotfiles-dir (file-name-directory
+                    (or (buffer-file-name) load-file-name)))
+#+end_src
+
 The following files contain the remainder of the core of the Emacs
 Starter Kit.  All of the code in this section should be loaded by
 everyone using the starter kit.
@@ -360,10 +377,41 @@ everyone using the starter kit.
   (starter-kit-load "starter-kit-misc.org")
   #+end_src
 
-- Registers for jumping to commonly used files in [[file:starter-kit-registers.org][starter-kit-registers]]
+- Registers for jumping to commonly used files in
+  [[file:starter-kit-registers.org][starter-kit-registers]]
+
   #+begin_src emacs-lisp
   (starter-kit-load "starter-kit-registers.org")
   #+end_src
+
+- More language customizations:
+  #+begin_src emacs-lisp
+    (starter-kit-load "starter-kit-lisp.org")
+    (starter-kit-load "starter-kit-haskell.org")
+    (starter-kit-load "starter-kit-scala.org")
+    (starter-kit-load "starter-kit-eshell.org")
+    (starter-kit-load "starter-kit-org.org")
+  #+end_src
+
+- Set the path:
+#+begin_src emacs-lisp
+(set-exec-path-from-shell-PATH)
+#+end_src
+
+- Thrift mode:
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path (concat dotfiles-dir "thrift-mode"))
+(require 'thrift-mode)
+#+end_src
+
+- Window numbering (my favorite!)
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path (concat dotfiles-dir "window-numbering"))
+(require 'window-numbering)
+(window-numbering-mode 1)
+#+end_src
 
 - [[http://code.google.com/p/yasnippet/][yasnippet]] is yet another snippet expansion system for Emacs.  It is
   inspired by TextMate's templating syntax.

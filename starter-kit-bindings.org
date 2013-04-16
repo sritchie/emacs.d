@@ -7,6 +7,37 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 Key Bindings.
 
+** Mac-Specific Customizations
+
+I prefer this mode for killing:
+
+#+begin_src emacs-lisp
+  ;; I like these better, for killing
+  (global-set-key (kbd "s-<backspace>") 'backward-kill-word)
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+  
+#+end_src
+
+#+begin_src emacs-lisp
+;; Mac specific options!
+(setq mac-option-modifier 'hyper) ; sets the Option key as Hyper
+(setq mac-option-modifier 'super) ; sets the Option key as Super
+(setq mac-command-modifier 'meta) ; sets the Command key as Meta
+
+;; Start emacs server
+(call-interactively 'server-start)
+
+;; Visual line mode
+(global-visual-line-mode t)
+
+;; Turn off mouse interface early in startup to avoid momentary display
+;; You really don't need these; trust me.
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+#+end_src
+
 ** You know, like Readline.
 #+begin_src emacs-lisp 
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
@@ -39,6 +70,20 @@ Key Bindings.
 (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
+#+end_src
+
+** AutoComplete
+#+begin_src emacs-lisp
+;; Autocomplete!
+(require 'auto-complete-config)
+(require 'ac-slime)
+;; (require 'hippie-expand-slime)
+;; (add-hook 'slime-mode-hook 'set-up-slime-hippie-expand)
+;; (add-hook 'slime-repl-mode-hook 'set-up-slime-hippie-expand)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(add-to-list 'ac-dictionary-directories (concat dotfiles-dir "autocomplete/ac-dict"))
+(ac-config-default)
 #+end_src
 
 ** File finding
@@ -107,3 +152,16 @@ Rgrep is infinitely useful in multi-file projects.
 #+begin_src emacs-lisp
   (define-key global-map "\C-x\C-r" 'rgrep)
 #+end_src
+
+** EShell
+#+begin_src emacs-lisp
+;; Start eshell or switch to it if it's active.
+(global-set-key (kbd "C-x m") 'eshell)
+
+;; Start a new eshell even if one is active.
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
+;; Start a regular shell if you prefer that.
+(global-set-key (kbd "C-x M-m") 'shell)
+#+end_src
+
