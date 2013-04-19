@@ -57,3 +57,5 @@ secret.org
 .emacs.desktop*
 .*~
 agent/*
+*.cache
+*.eld

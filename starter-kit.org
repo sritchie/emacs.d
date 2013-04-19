@@ -155,7 +155,7 @@ general starter-kit updates without conflict.
      #+begin_src emacs-lisp
        (starter-kit-load "gnus" "pretty-summary")
      #+end_src
-     
+
      Finally you can load just those subsections of a file which have
      a specific tag, so to load just the two sections of
      =starter-kit-misc-recommended.org= which are tagged =visual= add
@@ -267,7 +267,7 @@ interested in the actual code implementing the starter kit.
             ("elpa"        . "http://tromey.com/elpa/")
             ("melpa"       . "http://melpa.milkbox.net/packages/")))
     (package-initialize)
-    
+
     (defvar starter-kit-packages
       (list 'yasnippet-bundle
             'paredit
@@ -275,15 +275,17 @@ interested in the actual code implementing the starter kit.
             'clojure-mode
             'org
             'haskell-mode
-            'midje-mode)
+            'midje-mode
+            'htmlize
+            'browse-kill-ring)
       "Libraries that should be installed by default.")
-    
+
     (unless package-archive-contents
       (package-refresh-contents))
     (dolist (package starter-kit-packages)
       (unless (package-installed-p package)
         (package-install package)))
-    
+
   #+end_src
 
 - Functions for loading other parts of the starter kit
@@ -295,10 +297,10 @@ interested in the actual code implementing the starter kit.
     configuration from within that subtree will be loaded.  If it is
     not an id then it will be interpreted as a tag, and only subtrees
     marked with the given tag will be loaded.
-    
+
     For example, to load all of starter-kit-lisp.org simply
     add (starter-kit-load \"lisp\") to your configuration.
-    
+
     To load only the 'window-system' config from
     starter-kit-misc-recommended.org add
      (starter-kit-load \"misc-recommended\" \"window-system\")
@@ -391,6 +393,7 @@ everyone using the starter kit.
     (starter-kit-load "starter-kit-scala.org")
     (starter-kit-load "starter-kit-eshell.org")
     (starter-kit-load "starter-kit-org.org")
+    (starter-kit-load "starter-kit-misc-recommended.org")
   #+end_src
 
 - Set the path:
@@ -438,14 +441,14 @@ everyone using the starter kit.
   #+begin_src emacs-lisp
     (defun yas/org-very-safe-expand ()
       (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
-    
+
     (defun yas/org-setup ()
       ;; yasnippet (using the new org-cycle hooks)
       (make-variable-buffer-local 'yas/trigger-key)
       (setq yas/trigger-key [tab])
       (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
       (define-key yas/keymap [tab] 'yas/next-field))
-    
+
     (add-hook 'org-mode-hook #'yas/org-setup)
   #+end_src
 
@@ -503,12 +506,14 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 #+name: m-x-customize-customizations
 #+begin_src emacs-lisp
   (load custom-file 'noerror)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+end_src
 
 * Footnotes
 
 [1] If you already have a directory at =~/.emacs.d= move it out of the
     way and put this there instead.
+
 
 [2] The emacs starter kit uses [[http://orgmode.org/][Org Mode]] to load embedded elisp code
     directly from literate Org-mode documents.

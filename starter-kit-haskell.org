@@ -48,6 +48,7 @@ Haskell mode hook
       (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
     (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+    (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
     (add-to-list 'completion-ignored-extensions ".hi")
   
   (custom-set-faces
