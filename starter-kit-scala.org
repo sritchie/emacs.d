@@ -16,6 +16,15 @@ First, we need to add ensime to the load path:
 (add-to-list 'load-path (concat dotfiles-dir "ensime/elisp"))
 #+end_src
 
+Here's a java hook that takes care of the two-space indent issue.
+
+#+BEGIN_SRC emacs-lisp
+  (defun my-c-mode-hook ()
+    (setq c-basic-offset 2
+          c-label-offset 0))
+  (add-hook 'c-mode-common-hook 'my-c-mode-hook)
+
+#+END_SRC
 Scala mode hook:
 #+begin_src emacs-lisp
 ;; Ensime Mode
