@@ -24,6 +24,7 @@ You should add registers here for the files you edit most often.
                            (t dir)))))
            (?s (file . ,(concat starter-kit-dir "starter-kit.org")))
            (?b (file . ,(concat (getenv "HOME") "/.bashrc")))
-           (?r (file . ,(concat starter-kit-dir "starter-kit-registers.org")))))
+           (?r (file . ,(concat starter-kit-dir "starter-kit-registers.org")))
+           (?t (file . ,(concat (getenv "HOME") "/code/twitter/science/src/scala/com/twitter/summingbird_internal/tutorial/literate.org")))))
     (set-register (car r) (cadr r)))
 #+end_src

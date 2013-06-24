@@ -94,13 +94,35 @@ back, =C-M-u= up, =C-M-d= down)
   (define-key clojure-mode-map (kbd "C-c v") 'slime-eval-buffer)
   (define-key clojure-mode-map (kbd "C-c C-v") 'slime-eval-buffer)
 
+
+  ;; SLIME setup:
+  (eval-after-load "slime"
+    `(progn
+       (slime-setup '(slime-repl))
+       (slime-setup '(slime-fuzzy))
+       (custom-set-variables
+        '(inhibit-splash-screen t)
+        '(slime-complete-symbol*-fancy t)
+        '(slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+        '(slime-net-coding-system ‘utf-8-unix)
+        '(slime-startup-animation nil)
+        '(slime-lisp-implementations '((sbcl ("sbcl") :coding-system utf-8-unix))))))
+
+  ;; Stop SLIME’s REPL from grabbing DEL,
+  ;; which is annoying when backspacing over a ‘(‘
+  (defun override-slime-repl-bindings-with-paredit ()
+    (define-key slime-repl-mode-map
+      (read-kbd-macro paredit-backward-delete-key) nil))
+
+  (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+
   (defface starter-kit-clojure-trace-face
-     '((((class color) (background dark))
-        (:foreground "grey50"))
-       (((class color) (background light))
-        (:foreground "grey55")))
-     "Face used to dim parentheses."
-     :group 'starter-kit-faces)
+    '((((class color) (background dark))
+       (:foreground "grey50"))
+      (((class color) (background light))
+       (:foreground "grey55")))
+    "Face used to dim parentheses."
+    :group 'starter-kit-faces)
 
   (setq starter-kit-clojure-trace-face 'starter-kit-clojure-trace-face)
 
@@ -120,7 +142,7 @@ back, =C-M-u= up, =C-M-d= down)
 
   (defun slime-jump-to-trace (&optional on)
     "Jump to the file/line that the current stack trace line references.
-  Only works with files in your project root's src/, not in dependencies."
+    Only works with files in your project root's src/, not in dependencies."
     (interactive)
     (save-excursion
       (beginning-of-line)
@@ -148,7 +170,7 @@ back, =C-M-u= up, =C-M-d= down)
   (defun clojure-project (path)
     "Setup classpaths for a clojure project and starts a new SLIME session.
 
-  Kills existing SLIME session, if any."
+    Kills existing SLIME session, if any."
     (interactive (list
                   (ido-read-directory-name
                    "Project root: "
@@ -173,11 +195,11 @@ back, =C-M-u= up, =C-M-d= down)
     (save-window-excursion
       (slime)))
 
-   (require 'ac-nrepl)
-   (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-   (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-   (eval-after-load "auto-complete"
-     '(add-to-list 'ac-modes 'nrepl-mode))
+  (require 'ac-nrepl)
+  (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
+  (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
+  (eval-after-load "auto-complete"
+    '(add-to-list 'ac-modes 'nrepl-mode))
 
 #+end_src
 

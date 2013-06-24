@@ -7,6 +7,12 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 Key Bindings.
 
+** Code Search
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c d") 'dash-at-point)
+#+END_SRC
+
 ** Mac-Specific Customizations
 
 I prefer this mode for killing:

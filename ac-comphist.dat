@@ -1,1 +1,12 @@
-(nil)
+((("java.util.ArrayList" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 \.\.\.])
+  ("to-tuple" .
+   [1 0 0 0 0 0 0 0])
+  ("to-source" .
+   [1 0 0 0 0 0 0 0 0])
+  ("cascalog.api" .
+   [1 0 0 0 0 0 0 0 0 0 0 0])
+  ("cascalog.io" .
+   [1 0 0 0 0 0 0 0 0 0 0])
+  ("HadoopFlowProcess" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 \.\.\.])))

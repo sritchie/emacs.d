@@ -201,4 +201,7 @@ Auto-revert buffers, always:
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+  (setq auto-mode-alist (cons '("\\.v$" . coq-mode) auto-mode-alist))
+  (autoload 'coq-mode "coq" "Major mode for editing Coq vernacular." t)
 #+END_SRC

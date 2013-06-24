@@ -239,6 +239,7 @@ interested in the actual code implementing the starter kit.
   #+name: starter-kit-load-paths
   #+begin_src emacs-lisp
     (add-to-list 'load-path starter-kit-dir)
+    (add-to-list 'load-path "/usr/local/Cellar/coq/8.4pl2/lib/emacs/site-lisp")
     (setq autoload-file (concat starter-kit-dir "loaddefs.el"))
     (setq package-user-dir (concat starter-kit-dir "elpa"))
     (setq custom-file (concat starter-kit-dir "custom.el"))
@@ -265,6 +266,7 @@ interested in the actual code implementing the starter kit.
             ("org"         . "http://orgmode.org/elpa/")
             ("marmalade"   . "http://marmalade-repo.org/packages/")
             ("elpa"        . "http://tromey.com/elpa/")
+            ("org" . "http://orgmode.org/elpa/")
             ("melpa"       . "http://melpa.milkbox.net/packages/")))
     (package-initialize)
 
@@ -500,6 +502,7 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
                (mapcar #'remove-extension
                        (directory-files user-dir t ".*\.\\(org\\|el\\)\\(\\.gpg\\)?$"))
                :test #'string=)))))
+
 #+end_src
 
 *** Settings from M-x customize
