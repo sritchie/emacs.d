@@ -22,8 +22,13 @@ I prefer this mode for killing:
   (global-set-key (kbd "s-<backspace>") 'backward-kill-word)
   (global-set-key (kbd "C-w") 'backward-kill-word)
   (global-set-key (kbd "C-x C-k") 'kill-region)
-
 #+end_src
+
+Now, some markdown copying bullshit:
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c m") 'copy-code-as-rtf)
+#+END_SRC
 
 #+begin_src emacs-lisp
 ;; Mac specific options!
@@ -216,4 +221,29 @@ Rgrep is infinitely useful in multi-file projects.
 
 ;; Duplicate line?
 (global-set-key [C-return] 'defunkt-duplicate-line)
+#+END_SRC
+
+
+** Speedbar Settings
+
+Speedbar plugins@
+
+#+BEGIN_SRC emacs-lisp
+  (require 'sr-speedbar)
+  (global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
+  (speedbar-add-supported-extension ".clj")
+  (speedbar-add-supported-extension ".cljx")
+  (speedbar-add-supported-extension ".cljs")
+  (speedbar-add-supported-extension ".scala")
+  (setq speedbar-use-images nil)
+
+  ;; Speedbar parameters. I like the speedbar to be a little wider
+  (setq speedbar-frame-parameters
+        `((minibuffer)
+          (width . 50)
+          (border-width . 0)
+          (menu-bar-lines . 0)
+          (tool-bar-lines . 0)
+          (unsplittable . t)
+          (left-fringe . 0)))
 #+END_SRC

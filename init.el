@@ -1,4 +1,4 @@
-;;; init.el --- Where all the magic begins
+;; init.el --- Where all the magic begins
 ;;
 ;; Part of the Emacs Starter Kit
 ;;
@@ -16,3 +16,4 @@
     (org-babel-load-file (expand-file-name "starter-kit.org" starter-kit-dir))))
 
 ;;; init.el ends here
+(put 'set-goal-column 'disabled nil)

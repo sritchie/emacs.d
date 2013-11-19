@@ -1,12 +1,20 @@
-((("java.util.ArrayList" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 \.\.\.])
-  ("to-tuple" .
+((("timed-fn" .
    [1 0 0 0 0 0 0 0])
-  ("to-source" .
-   [1 0 0 0 0 0 0 0 0])
-  ("cascalog.api" .
-   [1 0 0 0 0 0 0 0 0 0 0 0])
-  ("cascalog.io" .
-   [1 0 0 0 0 0 0 0 0 0 0])
-  ("HadoopFlowProcess" .
-   [1 0 0 0 0 0 0 0 0 0 0 0 \.\.\.])))
+  ("paddleguru.riemann" .
+   [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("chan" .
+   [1 0 0 0])
+  ("close!" .
+   [1 0 0 0 0 0])
+  ("as" .
+   [0 1])
+  ("global-set-key" .
+   [0 0 0 0 0 0 0 0 0 0 1 0 0 0])
+  ("kbd" .
+   [1 0 0])
+  ("marks" .
+   [0 0 0 0 1])
+  ("markdown-mode" .
+   [0 0 0 0 0 1 0 0 0 0 0 0 0])
+  ("copy-code-as-rtf" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0])))

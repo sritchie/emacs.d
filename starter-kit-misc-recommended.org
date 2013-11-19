@@ -22,7 +22,7 @@ install them. Other dependencies are provided by Emacs 24.
    :CUSTOM_ID: window-system
    :END:
 #+name: starter-kit-window-view-stuff-recommended
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (when window-system
   (tooltip-mode -1)
   (tool-bar-mode -1))
@@ -31,7 +31,7 @@ install them. Other dependencies are provided by Emacs 24.
 ** No Menu Bar                                                       :visual:
 You really don't need this; trust me.
 #+name: starter-kit-no-menu
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (menu-bar-mode -1)
 #+end_src
 
@@ -63,5 +63,5 @@ Set this to whatever browser you use e.g...
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 #+end_src
-
