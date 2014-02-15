@@ -92,12 +92,6 @@ Now, some markdown copying bullshit:
 #+begin_src emacs-lisp
 ;; Autocomplete!
 (require 'auto-complete-config)
-(require 'ac-slime)
-;; (require 'hippie-expand-slime)
-;; (add-hook 'slime-mode-hook 'set-up-slime-hippie-expand)
-;; (add-hook 'slime-repl-mode-hook 'set-up-slime-hippie-expand)
-(add-hook 'slime-mode-hook 'set-up-slime-ac)
-(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
 (add-to-list 'ac-dictionary-directories (concat dotfiles-dir "autocomplete/ac-dict"))
 (ac-config-default)
 #+end_src
@@ -226,7 +220,7 @@ Rgrep is infinitely useful in multi-file projects.
 
 ** Speedbar Settings
 
-Speedbar plugins@
+Speedbar plugins.
 
 #+BEGIN_SRC emacs-lisp
   (require 'sr-speedbar)
@@ -246,4 +240,13 @@ Speedbar plugins@
           (tool-bar-lines . 0)
           (unsplittable . t)
           (left-fringe . 0)))
+#+END_SRC
+
+** Indentation Levels
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'css-mode-hook
+            (lambda ()
+              (setq css-basic-offset 2)))
+
 #+END_SRC

@@ -198,13 +198,6 @@ back, =C-M-u= up, =C-M-d= down)
                            slime-lisp-implementations)))
     (save-window-excursion
       (slime)))
-
-  (require 'ac-nrepl)
-  (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-  (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-  (eval-after-load "auto-complete"
-    '(add-to-list 'ac-modes 'nrepl-mode))
-
 #+end_src
 
 #+results:

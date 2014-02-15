@@ -93,7 +93,7 @@ ido-mode is like magic pixie dust!
   (set-default 'indicate-empty-lines t)
   (set-default 'imenu-auto-rescan t)
 
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+;;   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   ;; (add-hook 'text-mode-hook 'turn-on-flyspell)
 
   (defvar starter-kit-coding-hook nil
@@ -188,21 +188,20 @@ Auto-revert buffers, always:
 
   ;; Set up snippets
   (textmate-mode)
-  (yas/initialize)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-    (add-hook 'markdown-mode-hook '(lambda () (auto-fill-mode 0)))
-    (add-hook 'text-mode-hook '(lambda () (auto-fill-mode 0)))
-  (add-hook html-mode-hook '(lambda () (auto-fill-mode 0)))
-    (add-hook 'org-mode-hook '(lambda () (auto-fill-mode 0)))
+  (add-hook 'markdown-mode-hook '(lambda () (auto-fill-mode 0)))
+  (add-hook 'text-mode-hook '(lambda () (auto-fill-mode 0)))
+  (add-hook 'html-mode-hook '(lambda () (auto-fill-mode 0)))
+  (add-hook 'org-mode-hook '(lambda () (auto-fill-mode 0)))
 
-    (autoload 'markdown-mode "markdown-mode"
-      "Major mode for editing Markdown files" t)
-    (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-    (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-    (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  (autoload 'markdown-mode "markdown-mode"
+    "Major mode for editing Markdown files" t)
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-    (setq auto-mode-alist (cons '("\\.v$" . coq-mode) auto-mode-alist))
-    (autoload 'coq-mode "coq" "Major mode for editing Coq vernacular." t)
+  (setq auto-mode-alist (cons '("\\.v$" . coq-mode) auto-mode-alist))
+  (autoload 'coq-mode "coq" "Major mode for editing Coq vernacular." t)
 #+END_SRC
