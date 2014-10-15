@@ -267,7 +267,8 @@ interested in the actual code implementing the starter kit.
             ("marmalade"   . "http://marmalade-repo.org/packages/")
             ("elpa"        . "http://tromey.com/elpa/")
             ("org" . "http://orgmode.org/elpa/")
-            ("melpa"       . "http://melpa.milkbox.net/packages/")))
+            ("melpa"       . "http://melpa.milkbox.net/packages/")
+            ("melpa-stable"       . "http://melpa-stable.milkbox.net/packages/")))
     (package-initialize)
 
     (defvar starter-kit-packages

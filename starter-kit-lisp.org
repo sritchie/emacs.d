@@ -64,6 +64,8 @@ back, =C-M-u= up, =C-M-d= down)
   (add-hook 'emacs-lisp-mode-hook 'starter-kit-remove-elc-on-save)
   ;; (add-hook 'emacs-lisp-mode-hook 'idle-highlight)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-paredit)
+  (add-hook 'clojurescript-mode-hook 'turn-on-paredit)
+  (add-hook 'cider-repl-mode-hook 'turn-on-paredit)
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
 
   (defun starter-kit-remove-elc-on-save ()
@@ -89,6 +91,7 @@ back, =C-M-u= up, =C-M-d= down)
   (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
 
   (add-hook 'clojure-mode-hook 'run-starter-kit-coding-hook)
+  (add-hook 'clojure-mode-hook 'typed-clojure-mode)
 
   ;; (add-hook 'clojure-mode-hook 'flymake-mode-on)
 
@@ -108,9 +111,8 @@ back, =C-M-u= up, =C-M-d= down)
         '(inhibit-splash-screen t)
         '(slime-complete-symbol*-fancy t)
         '(slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-        '(slime-net-coding-system ‘utf-8-unix)
         '(slime-startup-animation nil)
-        '(slime-lisp-implementations '((sbcl ("sbcl") :coding-system utf-8-unix))))))
+        '(slime-lisp-implementations '((sbcl ("sbcl")))))))
 
   ;; Stop SLIME’s REPL from grabbing DEL,
   ;; which is annoying when backspacing over a ‘(‘

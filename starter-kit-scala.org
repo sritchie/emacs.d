@@ -10,12 +10,6 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 Support for editing Scala.
 
-First, we need to add ensime to the load path:
-
-#+begin_src emacs-lisp
-(add-to-list 'load-path (concat dotfiles-dir "ensime/elisp"))
-#+end_src
-
 Here's a java hook that takes care of the two-space indent issue.
 
 #+BEGIN_SRC emacs-lisp
@@ -27,12 +21,13 @@ Here's a java hook that takes care of the two-space indent issue.
 #+END_SRC
 Scala mode hook:
 #+begin_src emacs-lisp
-;; Ensime Mode
-(require 'ensime)
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-(define-key ensime-mode-map (kbd "C-c C-b") 'ensime-inf-eval-buffer)
-(define-key ensime-mode-map (kbd "C-c C-l") 'ensime-inf-load-file)
-(define-key ensime-mode-map (kbd "C-c C-r") 'ensime-inf-eval-region)
+  ;; Ensime Mode
+  (require 'ensime)
+  (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+  (define-key ensime-mode-map (kbd "C-c C-b") 'ensime-inf-eval-buffer)
+  (define-key ensime-mode-map (kbd "C-c C-l") 'ensime-inf-load-file)
+  (define-key ensime-mode-map (kbd "C-c C-r") 'ensime-inf-eval-region)
+  (add-hook 'scala-mode-hook 'flymake-mode-on)
 #+end_src
 
 And some configuration:

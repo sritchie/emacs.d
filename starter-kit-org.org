@@ -201,8 +201,6 @@ file using the `org-babel-lob-ingest' function.
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")))
 
-  (require 'org-special-blocks)
-
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
