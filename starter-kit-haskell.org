@@ -21,38 +21,143 @@ pretty lambdas in Haskell code
 
 Haskell mode hook
 #+begin_src emacs-lisp
-    (add-to-list 'load-path (concat dotfiles-dir "haskell"))
-    (require 'hs-lint)
-    (require 'haskell-ac)
-  
-    (defun my-haskell-mode-hook ()
-      "hs-lint binding, plus autocompletion and paredit."
-      (local-set-key "\C-cl" 'hs-lint)
-      (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
-      (setq ac-sources
-            (append '(ac-source-yasnippet
-                      ac-source-abbrev
-                      ac-source-words-in-buffer
-                      my/ac-source-haskell)
-                    ac-sources))
-      (dolist (x '(haskell literate-haskell))
-        (add-hook
-         (intern (concat (symbol-name x)
-                         "-mode-hook"))
-         'turn-on-paredit)))
-    
-    (add-hook 'haskell-mode-hook 'run-starter-kit-coding-hook)
-    (add-hook 'haskell-mode-hook 'flymake-haskell-multi-load)
-    (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-    (when (window-system)
-      (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-    (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
-    (add-to-list 'completion-ignored-extensions ".hi")
-  
+  (add-to-list 'load-path (concat dotfiles-dir "haskell"))
+  (require 'hs-lint)
+  (require 'haskell-ac)
+  (require 'haskell-mode)
+  (require 'haskell-interactive-mode)
+
+  (eval-after-load 'flycheck
+    '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
+
+  ;; (eval-after-load 'flycheck
+  ;;   '(custom-set-variables
+  ;;     '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+
+  (defun my-haskell-mode-hook ()
+    "hs-lint binding, plus autocompletion and paredit."
+    (local-set-key "\C-cl" 'hs-lint)
+
+    ;; (local-set-key (kbd "C-c d") 'flymake-display-err-menu-for-current-line)
+    (setq ac-sources
+          (append '(ac-source-yasnippet
+                    ac-source-abbrev
+                    ac-source-words-in-buffer
+                    my/ac-source-haskell)
+                  ac-sources))
+    (dolist (x '(haskell literate-haskell))
+      (add-hook
+       (intern (concat (symbol-name x)
+                       "-mode-hook"))
+       'turn-on-paredit)))
+
+  (add-hook 'haskell-mode-hook 'run-starter-kit-coding-hook)
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+  ;; (when (window-system)
+  ;;   (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  ;; (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)
+  (add-to-list 'completion-ignored-extensions ".hi")
+
   (custom-set-faces
    '(flymake-errline ((((class color)) (:underline "red"))))
-   '(flymake-warnline ((((class color)) (:underline "yellow")))))  
-  
+   '(flymake-warnline ((((class color)) (:underline "yellow")))))
+
+  (custom-set-variables
+   '(haskell-process-suggest-remove-import-lines t)
+   '(haskell-process-auto-import-loaded-modules t)
+   '(haskell-process-log t))
+
+  ;; Keybindings
+
+  (define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl)
+  (define-key haskell-mode-map [f8] 'haskell-navigate-imports)
+
+  ;; Due to https://github.com/haskell/haskell-mode/issues/536, my
+  ;; haskell process freezes up generating tags pretty often.
+  (define-key haskell-interactive-mode-map [f7] 'haskell-process-clear)
+  (define-key haskell-mode-map [f7] 'haskell-process-clear)
+  (define-key haskell-mode-map (kbd "C-c C-u") 'haskell-insert-undefined)
+  (define-key haskell-mode-map (kbd "C-<return>") 'haskell-simple-indent-newline-indent)
+
+  (custom-set-faces
+   '(shm-quarantine-face ((t (:inherit font-lock-error))))
+   )
+
+  ;; Tag jumping
+  (define-key haskell-interactive-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
+  (define-key haskell-interactive-mode-map (kbd "M-,") 'pop-tag-mark)
+  (define-key haskell-mode-map (kbd "M-,") 'pop-tag-mark)
+
+  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+  (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
+  (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+  (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+  (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
+
+  (autoload 'ghc-init "ghc" nil t)
+  (autoload 'ghc-debug "ghc" nil t)
+  (add-hook 'haskell-mode-hook (lambda () (ghc-init)))
+
+  ;; Company Mode
+  (require 'company)
+  (add-hook 'haskell-mode-hook 'company-mode)
+
+  ;; Set up company mode
+  (add-to-list 'company-backends 'company-ghc)
+  (custom-set-variables '(company-ghc-show-info t))
+
+  (custom-set-variables '(haskell-tags-on-save t))
+
+  (setq w3m-mode-map (make-sparse-keymap))
+
+  (define-key w3m-mode-map (kbd "RET") 'w3m-view-this-url)
+  (define-key w3m-mode-map (kbd "q") 'bury-buffer)
+  (define-key w3m-mode-map (kbd "<mouse-1>") 'w3m-maybe-url)
+  (define-key w3m-mode-map [f5] 'w3m-reload-this-page)
+  (define-key w3m-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
+  (define-key w3m-mode-map (kbd "M-<left>") 'w3m-view-previous-page)
+  (define-key w3m-mode-map (kbd "M-<right>") 'w3m-view-next-page)
+  (define-key w3m-mode-map (kbd "M-.") 'w3m-haddock-find-tag)
+
+  (defun w3m-maybe-url ()
+    (interactive)
+    (if (or (equal '(w3m-anchor) (get-text-property (point) 'face))
+            (equal '(w3m-arrived-anchor) (get-text-property (point) 'face)))
+        (w3m-view-this-url)))
+
+  (require 'w3m-haddock)
+
+  (add-hook 'w3m-display-hook 'w3m-haddock-display)
+
+  (define-key haskell-mode-map (kbd "C-c C-d") 'haskell-w3m-open-haddock)
+
 #+end_src
+
+And some stuff for Agda:
+
+#+BEGIN_SRC emacs-lisp
+  (load "/Users/sritchie/.cabal/share/x86_64-osx-ghc-7.8.3/Agda-2.4.2/emacs-mode/agda2.el")
+
+  (setq agda2-include-dirs
+        (list "." (expand-file-name "~/code/agda/agda-stdlib-0.8.1/src")))
+
+  (custom-set-faces
+   '(agda2-highlight-datatype-face ((t (:foreground "SkyBlue2"))))
+   '(agda2-highlight-field-face ((t (:foreground "MediumOrchid2"))))
+   '(agda2-highlight-function-face ((t (:foreground "yellow1"))))
+   '(agda2-highlight-inductive-constructor-face ((t (:foreground "green2"))))
+   '(agda2-highlight-keyword-face ((t (:foreground "orange2"))))
+   '(agda2-highlight-module-face ((t (:foreground "magenta2"))))
+   '(agda2-highlight-number-face ((t (:foreground "orchid2"))))
+   '(agda2-highlight-operator-face ((t (:foreground "salmon2"))))
+   '(agda2-highlight-primitive-face ((t (:foreground "OliveDrab2"))))
+   '(agda2-highlight-primitive-type-face ((t (:foreground "DodgerBlue2"))))
+   '(agda2-highlight-record-face ((t (:foreground "SkyBlue2"))))
+   )
+
+#+END_SRC
