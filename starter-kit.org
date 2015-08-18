@@ -267,8 +267,8 @@ interested in the actual code implementing the starter kit.
             ("marmalade"   . "http://marmalade-repo.org/packages/")
             ("elpa"        . "http://tromey.com/elpa/")
             ("org" . "http://orgmode.org/elpa/")
-            ("melpa"       . "http://melpa.milkbox.net/packages/")
-            ("melpa-stable"       . "http://melpa-stable.milkbox.net/packages/")))
+            ("melpa"       . "http://melpa.org/packages/")
+            ("melpa-stable" . "http://stable.melpa.org/packages/")))
     (package-initialize)
 
     (defvar starter-kit-packages
@@ -277,7 +277,6 @@ interested in the actual code implementing the starter kit.
             'clojure-mode
             'org
             'haskell-mode
-            'midje-mode
             'htmlize
             'browse-kill-ring)
       "Libraries that should be installed by default.")
@@ -288,6 +287,18 @@ interested in the actual code implementing the starter kit.
       (unless (package-installed-p package)
         (package-install package)))
 
+    (defvar om-methods
+      (list 'render
+            'render-state
+            'init-state
+            'will-mount
+            'did-mount
+            'should-update
+            'will-receive-props
+            'will-update
+            'display-name
+            'will-unmount)
+      "Libraries that should be installed by default.")
   #+end_src
 
 - Functions for loading other parts of the starter kit
@@ -390,8 +401,8 @@ everyone using the starter kit.
 
 - More language customizations:
   #+begin_src emacs-lisp
-    (starter-kit-load "starter-kit-lisp.org")
     (starter-kit-load "starter-kit-haskell.org")
+    (starter-kit-load "starter-kit-lisp.org")
     (starter-kit-load "starter-kit-scala.org")
     (starter-kit-load "starter-kit-eshell.org")
     (starter-kit-load "starter-kit-org.org")
@@ -550,6 +561,10 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
   (global-set-key (kbd "C-c b d") (lambda ()
                                     (interactive)
                                     (find-file "~/sritchie.github.com/org/_drafts/")))
+
+
+    (dolist (s om-methods)
+      (put-clojure-indent s 'defun))
 #+END_SRC
 
 * Footnotes

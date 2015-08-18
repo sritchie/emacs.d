@@ -1,6 +1,6 @@
 ;; init.el --- Where all the magic begins
 ;;
-;; Part of the Emacs Starter Kit
+;; part of the Emacs Starter Kit
 ;;
 ;; This is the first thing to get loaded.
 ;;
