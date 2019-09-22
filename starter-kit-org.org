@@ -14,6 +14,7 @@ sequence =C-c C-v h= (bound to `=org-babel-describe-bindings=') will
 display a list of the code blocks commands and their related keys.
 
 #+begin_src emacs-lisp
+  (require 'org-tempo)
   (setq org-use-speed-commands t)
 #+end_src
 
