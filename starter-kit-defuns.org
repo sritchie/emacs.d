@@ -115,7 +115,7 @@ a lambda doesn't already exist in the list.
 
 Set the path from the environment.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;; Get path from environment!
 (defun set-exec-path-from-shell-PATH ()
   (let ((path-from-shell
@@ -134,5 +134,6 @@ Extra bullshit
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
+(setenv "PKG_CONFIG_PATH" "/usr/local/Cellar/zlib/1.2.11/lib/pkgconfig:/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig")
 
 #+END_SRC

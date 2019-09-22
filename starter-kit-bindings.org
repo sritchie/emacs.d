@@ -229,3 +229,19 @@ Rgrep is infinitely useful in multi-file projects.
 ;; This is your old M-x.
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 #+END_SRC
+
+** Face
+
+#+BEGIN_SRC emacs-lisp
+(defun goto-line-show ()
+  "Show line numbers temporarily, while prompting for the line number input."
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (call-interactively #'goto-line))
+    (linum-mode -1)))
+
+(global-set-key (kbd "s-l") 'goto-line-show)
+
+#+END_SRC

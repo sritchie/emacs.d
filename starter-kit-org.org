@@ -30,15 +30,14 @@ contains an up to date list of the currently supported languages.
   (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
-       (sh . t)
+       (shell . t)
        (R . t)
        (python . t)
        (ruby . t)
        (latex . t)
        (haskell . t)
        (clojure . t)
-       (dot . t)
-       (scala . t)))
+       (dot . t)))
 #+end_src
 
 You are encouraged to add the following to your personal configuration
@@ -145,7 +144,7 @@ file using the `org-babel-lob-ingest' function.
     "Title: "
     "#+TITLE:" str " \n"
     "#+AUTHOR: Sam Ritchie\n"
-    "#+email: sritchie@twitter.com\n"
+    "#+email: sritchie09@gmail.com\n"
     "#+BABEL: :mkdirp yes :tangle yes \n"
     "-----")
 
@@ -153,6 +152,7 @@ file using the `org-babel-lob-ingest' function.
 
   (require 'ox-latex)
   (require 'ox-confluence)
+  (require 'org-tempo)
 
   (add-to-list 'org-latex-packages-alist '("" "minted"))
   (setq org-latex-listings 'minted)
@@ -291,6 +291,9 @@ file using the `org-babel-lob-ingest' function.
 
   (define-key global-map "\C-cn"
     (lambda () (interactive) (org-capture nil "j")))
+
+  (setq org-latex-create-formula-image-program 'dvisvgm)
+
 #+END_SRC
 
 ** Web Mode

@@ -8,31 +8,50 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
   :results:  silent
   :END:
 
-Support for editing Scala.
+  Support for editing Scala.
 
-Here's a java hook that takes care of the two-space indent issue.
+  Here's a java hook that takes care of the two-space indent issue.
 
-#+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp
   (defun my-c-mode-hook ()
     (setq c-basic-offset 2
           c-label-offset 0))
   (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
-#+END_SRC
-Scala mode hook:
-#+begin_src emacs-lisp
-  ;; Ensime Mode
-  (require 'ensime)
-  (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-  (define-key ensime-mode-map (kbd "C-c C-b") 'ensime-inf-eval-buffer)
-  (define-key ensime-mode-map (kbd "C-c C-l") 'ensime-inf-load-file)
-  (define-key ensime-mode-map (kbd "C-c C-r") 'ensime-inf-eval-region)
-  (add-hook 'scala-mode-hook 'flymake-mode-on)
-#+end_src
+  #+END_SRC
 
-And some configuration:
+  And some configuration:
 
-#+begin_src emacs-lisp
+  #+begin_src emacs-lisp
+
+;; Enable scala-mode and sbt-mode
+;; (use-package scala-mode
+;;   :mode "\\.s\\(cala\\|bt\\)$")
+;;
+;; (use-package sbt-mode
+;;   :commands sbt-start sbt-command
+;;   :config
+;;   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+;;   ;; allows using SPACE when in the minibuffer
+;;   (substitute-key-definition
+;;    'minibuffer-complete-word
+;;    'self-insert-command
+;;    minibuffer-local-completion-map))
+
+;; Enable nice rendering of diagnostics like compile errors.
+;;(use-package flycheck
+;;  :init (global-flycheck-mode))
+
+;; (use-package lsp-mode
+;;   ;; Optional - enable lsp-mode automatically in scala files
+;;   :hook (scala-mode . lsp)
+;;   :config (setq lsp-prefer-flymake nil))
+
+;; (use-package lsp-ui)
+
+;; Add company-lsp backend for metals
+;; (use-package company-lsp)
+
   (add-hook 'scala-mode-hook
             '(lambda ()
                ;; Alternatively, bind the 'newline-and-indent' command and
@@ -58,4 +77,4 @@ And some configuration:
                ;; code line as a new statement.
                (local-set-key (kbd "<backtab>") 'scala-indent:indent-with-reluctant-strategy)
                ))
-#+end_src
+  #+end_src

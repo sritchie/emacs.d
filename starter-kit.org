@@ -1,6 +1,8 @@
 #+TITLE: Emacs Starter Kit
 #+OPTIONS: toc:2 num:nil ^:nil
 
+Of course we have to begin with this fantastic quote from Neal Stephenson:
+
 #+begin_quote
   Emacs outshines all other editing software in approximately the same
   way that the noonday sun does the stars. It is not just bigger and
@@ -13,11 +15,10 @@
   :PROPERTIES:
   :CUSTOM_ID: introduction
   :END:
-This should provide a saner set of defaults than you get normally with
-Emacs. It's intended for beginners, but provides a good elisp
-initialization structure for all levels of users.
 
-The main advantage of this Emacs Starter Kit are
+I stole this from the emacs starter kit, and then customized it
+hard. The main advantage of this Emacs Starter Kit are
+
 - better default settings
 - inclusion of many useful libraries and configurations
 - "literate" customization embedded in Org-mode files
@@ -98,14 +99,6 @@ be easy for you to continue tracking your own personal customization
 inside the starter-kit while retaining your ability to pull down
 general starter-kit updates without conflict.
 
-- git branch :: The first step to user-specific customization is (like
-     in any git project) to MAKE A BRANCH FOR YOUR LOCAL CHANGES.
-     Save the master branch for pulling down new versions of the
-     starter kit, and save all of your personal information in a
-     personal branch.  That way you never have to worry about
-     accidentally =git push='ing up a patch with all of your gnus
-     email passwords.
-
 - User specific config :: Your personal configuration information can
      be stored in a user-specific-config file.  This is the file named
      after your user with the extensions =.el= or =.org= [2].  If
@@ -133,55 +126,8 @@ general starter-kit updates without conflict.
        hostname
      #+end_src
 
-- Activating more of the starter kit :: By default, the starter kit
-     only includes customizations which are likely to be useful across
-     nearly any Emacs install (the only automatically loaded external
-     files are those listed in [[#load-the-starter-kit-core][Load the rest of the starter kit core]]).
-     You may have noticed that there are many other
-     =starter-kit-*.org= files located in this directory.  A good
-     first step is to browse these files and begin optionally loading
-     those that look relevant to your workflow.  For example, if you
-     often work with Python source code you will probably want to load
-     =starter-kit-python.org= either by directly copying the sections
-     that look useful into your personal config, or simply by loading
-     the entire file directly with the following.
-     #+begin_src emacs-lisp
-       (starter-kit-load "python")
-     #+end_src
-
-     Alternately you can load only one particular subsection of an
-     included file, for example to load just the "pretty-summary"
-     section of =starter-kit-gnus.org= run the following.
-     #+begin_src emacs-lisp
-       (starter-kit-load "gnus" "pretty-summary")
-     #+end_src
-
-     Finally you can load just those subsections of a file which have
-     a specific tag, so to load just the two sections of
-     =starter-kit-misc-recommended.org= which are tagged =visual= add
-     the following to your personal initialization.  Note: header id's
-     take priority over tags.
-     #+begin_src emacs-lisp
-       (starter-kit-load "gnus" "visual")
-     #+end_src
-
-- Installing more elisp libraries :: The easiest way to install new
-     libraries is through the Emacs Lisp Package Archive (see [[#emacs-lisp-package-archive][Emacs
-     Lisp Package Archive]] below).  When a library is not available
-     through ELPA you can grab it's source and place it directly in
-     the =src= directory.  Any packages found there will automatically
-     be added to your load-path when Emacs starts up, and are
-     guaranteed not to conflict with future starter-kit updates.
-
-- Misc :: Some additional miscellaneous configuration and getting
-     started suggestions
-   - First see the [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Customization.html#Customization][Customization]] node in the Emacs manual.  Available
-     online or through the =info= command (run with =C-h i=).
-   - =grep='ing through the =starter-kit-*= files in this directory
-     can provide useful examples for how to do things like install
-     major modes, define keybindings, etc..
-   - read the following [[http://www.gnu.org/software/emacs/elisp/html_node/Key-Binding-Conventions.html][Key-Binding-Conventions]] before defining too
-     many personal key bindings
+Might make sense to read the following [[http://www.gnu.org/software/emacs/elisp/html_node/Key-Binding-Conventions.html][Key-Binding-Conventions]] before
+defining too many personal key bindings.
 
 *** Optional starter kit packages
 The following customization packages are shipped with the starter kit
@@ -273,7 +219,7 @@ interested in the actual code implementing the starter kit.
 
     (defvar starter-kit-packages
       (list 'paredit
-            'scala-mode2
+            'scala-mode
             'clojure-mode
             'org
             'haskell-mode
@@ -379,54 +325,40 @@ everyone using the starter kit.
 
 - Starter kit function definitions in [[file:starter-kit-defuns.org][starter-kit-defuns]]
   #+begin_src emacs-lisp
-  (starter-kit-load "starter-kit-defuns.org")
+  (starter-kit-load "defuns")
   #+end_src
 
 - Key Bindings in [[file:starter-kit-bindings.org][starter-kit-bindings]]
   #+begin_src emacs-lisp
-  (starter-kit-load "starter-kit-bindings.org")
+  (starter-kit-load "bindings")
   #+end_src
 
 - Miscellaneous settings in [[file:starter-kit-misc.org][starter-kit-misc]]
   #+begin_src emacs-lisp
-  (starter-kit-load "starter-kit-misc.org")
+  (starter-kit-load "misc")
   #+end_src
 
 - Registers for jumping to commonly used files in
   [[file:starter-kit-registers.org][starter-kit-registers]]
 
   #+begin_src emacs-lisp
-  (starter-kit-load "starter-kit-registers.org")
+  (starter-kit-load "registers")
   #+end_src
 
 - More language customizations:
   #+begin_src emacs-lisp
-    (starter-kit-load "starter-kit-haskell.org")
-    (starter-kit-load "starter-kit-lisp.org")
-    (starter-kit-load "starter-kit-scala.org")
-    (starter-kit-load "starter-kit-eshell.org")
-    (starter-kit-load "starter-kit-org.org")
-    (starter-kit-load "starter-kit-misc-recommended.org")
+    (starter-kit-load "haskell")
+    (starter-kit-load "lisp")
+    (starter-kit-load "python")
+    (starter-kit-load "scala")
+    (starter-kit-load "eshell")
+    (starter-kit-load "org")
+    (starter-kit-load "misc-recommended")
   #+end_src
 
 - Set the path:
 #+begin_src emacs-lisp
 (set-exec-path-from-shell-PATH)
-#+end_src
-
-- Thrift mode:
-
-#+begin_src emacs-lisp
-(add-to-list 'load-path (concat dotfiles-dir "thrift-mode"))
-(require 'thrift-mode)
-#+end_src
-
-- Window numbering (my favorite!)
-
-#+begin_src emacs-lisp
-(add-to-list 'load-path (concat dotfiles-dir "window-numbering"))
-(require 'window-numbering)
-(window-numbering-mode 1)
 #+end_src
 
 ** Load User/System Specific Files
@@ -490,81 +422,101 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
 *** Jekyll Blog
 
 #+BEGIN_SRC emacs-lisp
-  (defvar jekyll-directory "/Users/sritchie/sritchie.github.com/org/"
-    "Path to Jekyll blog.")
-  (defvar jekyll-drafts-dir "_drafts/"
-    "Relative path to drafts directory.")
-  (defvar jekyll-posts-dir "_posts/"
-    "Relative path to posts directory.")
-  (defvar jekyll-post-ext ".org"
-    "File extension of Jekyll posts.")
-  (defvar jekyll-post-template
-    "#+STARTUP: showall indent\n#+STARTUP: hidestars\n#+BEGIN_HTML\n---\nlayout: post\ntitle: %s\n---\n\n<p class=\"meta\">Date - Boulder</p>\n#+END_HTML\n\n"
-    "Default template for Jekyll posts.  %s will be replaced by the post title.")
+    (defvar jekyll-directory "/Users/sritchie/sritchie.github.com/org/"
+      "Path to Jekyll blog.")
+    (defvar jekyll-drafts-dir "_drafts/"
+      "Relative path to drafts directory.")
+    (defvar jekyll-posts-dir "_posts/"
+      "Relative path to posts directory.")
+    (defvar jekyll-post-ext ".org"
+      "File extension of Jekyll posts.")
+    (defvar jekyll-post-template
+      "#+STARTUP: showall indent\n#+STARTUP: hidestars\n#+BEGIN_HTML\n---\nlayout: post\ntitle: %s\n---\n\n<p class=\"meta\">Date - Boulder</p>\n#+END_HTML\n\n"
+      "Default template for Jekyll posts.  %s will be replaced by the post title.")
 
-  (defun jekyll-make-slug (s)
-    "Turn a string into a slug."
-    (replace-regexp-in-string
-     " " "-" (downcase
-              (replace-regexp-in-string
-               "[^A-Za-z0-9 ]" "" s))))
+    (defun jekyll-make-slug (s)
+      "Turn a string into a slug."
+      (replace-regexp-in-string
+       " " "-" (downcase
+                (replace-regexp-in-string
+                 "[^A-Za-z0-9 ]" "" s))))
 
-  (defun jekyll-yaml-escape (s)
-    "Escape a string for YAML."
-    (if (or (string-match ":" s)
-            (string-match "\"" s))
-        (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"")
-      s))
+    (defun jekyll-yaml-escape (s)
+      "Escape a string for YAML."
+      (if (or (string-match ":" s)
+              (string-match "\"" s))
+          (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"")
+        s))
 
-  (defun jekyll-draft-post (title)
-    "Create a new Jekyll blog post."
-    (interactive "sPost Title: ")
-    (let ((draft-file (concat jekyll-directory jekyll-drafts-dir
-                              (jekyll-make-slug title)
-                              jekyll-post-ext)))
-      (if (file-exists-p draft-file)
+    (defun jekyll-draft-post (title)
+      "Create a new Jekyll blog post."
+      (interactive "sPost Title: ")
+      (let ((draft-file (concat jekyll-directory jekyll-drafts-dir
+                                (jekyll-make-slug title)
+                                jekyll-post-ext)))
+        (if (file-exists-p draft-file)
+            (find-file draft-file)
           (find-file draft-file)
-        (find-file draft-file)
-        (insert (format jekyll-post-template (jekyll-yaml-escape title))))))
+          (insert (format jekyll-post-template (jekyll-yaml-escape title))))))
 
-  (defun jekyll-publish-post ()
-    "Move a draft post to the posts directory, and rename it so that it
-  contains the date."
-    (interactive)
-    (cond
-     ((not (equal
-            (file-name-directory (buffer-file-name (current-buffer)))
-            (concat jekyll-directory jekyll-drafts-dir)))
-      (message "This is not a draft post.")
-      (insert (file-name-directory (buffer-file-name (current-buffer))) "\n"
+    (defun jekyll-publish-post ()
+      "Move a draft post to the posts directory, and rename it so that it
+        contains the date."
+      (interactive)
+      (cond
+       ((not (equal
+              (file-name-directory (buffer-file-name (current-buffer)))
               (concat jekyll-directory jekyll-drafts-dir)))
-     ((buffer-modified-p)
-      (message "Can't publish post; buffer has modifications."))
-     (t
-      (let ((filename
-             (concat jekyll-directory jekyll-posts-dir
-                     (format-time-string "%Y-%m-%d-")
-                     (file-name-nondirectory
-                      (buffer-file-name (current-buffer)))))
-            (old-point (point)))
-        (rename-file (buffer-file-name (current-buffer))
-                     filename)
-        (kill-buffer nil)
-        (find-file filename)
-        (set-window-point (selected-window) old-point)))))
+        (message "This is not a draft post.")
+        (insert (file-name-directory (buffer-file-name (current-buffer))) "\n"
+                (concat jekyll-directory jekyll-drafts-dir)))
+       ((buffer-modified-p)
+        (message "Can't publish post; buffer has modifications."))
+       (t
+        (let ((filename
+               (concat jekyll-directory jekyll-posts-dir
+                       (format-time-string "%Y-%m-%d-")
+                       (file-name-nondirectory
+                        (buffer-file-name (current-buffer)))))
+              (old-point (point)))
+          (rename-file (buffer-file-name (current-buffer))
+                       filename)
+          (kill-buffer nil)
+          (find-file filename)
+          (set-window-point (selected-window) old-point)))))
 
-  (global-set-key (kbd "C-c b n") 'jekyll-draft-post)
-  (global-set-key (kbd "C-c b P") 'jekyll-publish-post)
-  (global-set-key (kbd "C-c b p") (lambda ()
-                                    (interactive)
-                                    (find-file "~/sritchie.github.com/org/_posts/")))
-  (global-set-key (kbd "C-c b d") (lambda ()
-                                    (interactive)
-                                    (find-file "~/sritchie.github.com/org/_drafts/")))
+    (global-set-key (kbd "C-c b n") 'jekyll-draft-post)
+    (global-set-key (kbd "C-c b P") 'jekyll-publish-post)
+    (global-set-key (kbd "C-c b p") (lambda ()
+                                      (interactive)
+                                      (find-file "~/sritchie.github.com/org/_posts/")))
+    (global-set-key (kbd "C-c b d") (lambda ()
+                                      (interactive)
+                                      (find-file "~/sritchie.github.com/org/_drafts/")))
 
 
     (dolist (s om-methods)
       (put-clojure-indent s 'defun))
+
+    (setq olivetti-body-width 90)
+
+    (add-hook 'markdown-mode-hook
+              '(lambda ()
+                 (set (make-local-variable 'company-backends) '(company-dabbrev))
+                 (linum-mode -1) ;; There's a bug that won't let olivetti work with this.
+                 (olivetti-mode)
+                 (flyspell-mode 1)))
+
+    (setq ring-bell-function 'ignore)
+
+  (defadvice display-warning
+      (around no-warn-.emacs.d-in-load-path (type message &rest unused) activate)
+    "Ignore the warning about the `.emacs.d' directory being in `load-path'."
+    (unless (and (eq type 'initialization)
+                 (string-prefix-p "Your `load-path' seems to contain\nyour `.emacs.d' directory"
+                                  message t))
+      ad-do-it))
+
 #+END_SRC
 
 * Footnotes
