@@ -51,3 +51,8 @@ secret.org
 .emacs.desktop*
 .*~
 agent/*
+
+history
+network-security.data
+projectile-bookmarks.eld
+projectile.cache
