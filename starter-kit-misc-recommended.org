@@ -17,12 +17,24 @@ install them. Other dependencies are provided by Emacs 24.
       (package-install package)))
 #+end_src
 
+** Ignore warning about emacs.d load path
+
+#+BEGIN_SRC emacs-lisp
+(defadvice display-warning
+    (around no-warn-.emacs.d-in-load-path (type message &rest unused) activate)
+  "Ignore the warning about the `.emacs.d' directory being in `load-path'."
+  (unless (and (eq type 'initialization)
+               (string-prefix-p "Your `load-path' seems to contain\nyour `.emacs.d' directory"
+                                message t))
+    ad-do-it))
+#+END_SRC
+
 ** Window systems -- remove visual cruft                             :visual:
    :PROPERTIES:
    :CUSTOM_ID: window-system
    :END:
 #+name: starter-kit-window-view-stuff-recommended
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (when window-system
   (tooltip-mode -1)
   (tool-bar-mode -1))
@@ -31,7 +43,7 @@ install them. Other dependencies are provided by Emacs 24.
 ** No Menu Bar                                                       :visual:
 You really don't need this; trust me.
 #+name: starter-kit-no-menu
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (menu-bar-mode -1)
 #+end_src
 
@@ -55,13 +67,16 @@ Set this to whatever browser you use e.g...
 
 ** Associate modes with file extensions
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
-;; (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+  ;; (autoload 'octave-mode "octave-mod" nil t)
+  (setq auto-mode-alist
+        (cons '("\\.m$" . octave-mode) auto-mode-alist))
+  (add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
+  (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+  (require 'yaml-mode)
+  (add-to-list 'auto-mode-alist '("\\.ya?ml$" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\(on\\)?$" . js2-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+  (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 #+end_src
-

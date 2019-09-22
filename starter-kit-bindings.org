@@ -7,75 +7,130 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 Key Bindings.
 
+** Code Search
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c d") 'dash-at-point)
+#+END_SRC
+
+** Mac-Specific Customizations
+
+I prefer this mode for killing:
+
+#+begin_src emacs-lisp
+  ;; I like these better, for killing
+  (global-set-key (kbd "s-<backspace>") 'backward-kill-word)
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+#+end_src
+
+Now, some markdown copying bullshit:
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c m") 'copy-code-as-rtf)
+#+END_SRC
+
+#+begin_src emacs-lisp
+;; Mac specific options!
+(setq mac-option-modifier 'hyper) ; sets the Option key as Hyper
+(setq mac-option-modifier 'super) ; sets the Option key as Super
+(setq mac-command-modifier 'meta) ; sets the Command key as Meta
+
+;; Start emacs server
+(call-interactively 'server-start)
+
+;; Visual line mode
+(global-visual-line-mode t)
+
+;; Turn off mouse interface early in startup to avoid momentary display
+;; You really don't need these; trust me.
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+#+end_src
+
 ** You know, like Readline.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
 #+end_src
 
 ** Align your code in a pretty way.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x \\") 'align-regexp)
 #+end_src
 
+** org mode publishing
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c x") 'org-publish)
+#+end_src
+
 ** Completion that uses many different methods to find options.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "M-/") 'hippie-expand)
 #+end_src
 
 ** Turn on the menu bar for exploring new modes
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key [f1] 'menu-bar-mode)
 #+end_src
 
 ** Font size
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 #+end_src
 
 ** Use regex searches by default.
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "\C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 #+end_src
 
+** AutoComplete
+#+begin_src emacs-lisp
+;; Autocomplete!
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories (concat dotfiles-dir "autocomplete/ac-dict"))
+(ac-config-default)
+#+end_src
+
 ** File finding
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
   (global-set-key (kbd "C-x C-p") 'find-file-at-point)
   (global-set-key (kbd "C-c y") 'bury-buffer)
   (global-set-key (kbd "C-c r") 'revert-buffer)
   (global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
   (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "C-x f") 'recentf-ido-find-file)  
+  (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
 #+end_src
 
 ** Window switching. (C-x o goes to the next window)
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (windmove-default-keybindings) ;; Shift+direction
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1))) ;; back one
 (global-set-key (kbd "C-x C-o") (lambda () (interactive) (other-window 2))) ;; forward two
 #+end_src
 
 ** Indentation help
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x ^") 'join-line)
 #+end_src
 
 ** If you want to be able to M-x without meta
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 #+end_src
 
 ** Help should search more than just commands
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-h a") 'apropos)
 #+end_src
 
 ** Activate occur easily inside isearch
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (define-key isearch-mode-map (kbd "C-o")
     (lambda () (interactive)
       (let ((case-fold-search isearch-case-fold-search))
@@ -107,3 +162,70 @@ Rgrep is infinitely useful in multi-file projects.
 #+begin_src emacs-lisp
   (define-key global-map "\C-x\C-r" 'rgrep)
 #+end_src
+
+** EShell
+#+begin_src emacs-lisp
+;; Start eshell or switch to it if it's active.
+(global-set-key (kbd "C-x m") 'eshell)
+
+;; Start a new eshell even if one is active.
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
+;; Start a regular shell if you prefer that.
+(global-set-key (kbd "C-x M-m") 'shell)
+#+end_src
+
+** Helm Mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c h") 'helm-mini)
+  (global-set-key (kbd "C-c f") 'helm-projectile)
+#+END_SRC
+
+** Other Bullshit
+
+#+BEGIN_SRC emacs-lisp
+;; Kill ring browsage
+(browse-kill-ring-default-keybindings)
+
+;; If you want to be able to M-x without meta (phones, etc)
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
+
+;; Fetch the contents at a URL, display it raw.
+(global-set-key (kbd "C-x C-h") 'view-url)
+
+;; Help should search more than just commands
+(global-set-key (kbd "C-h a") 'apropos)
+
+;; Should be able to eval-and-replace anywhere.
+(global-set-key (kbd "C-c e") 'eval-and-replace)
+
+;; For debugging Emacs modes
+(global-set-key (kbd "C-c p") 'message-point)
+
+;; So good!
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c q") 'join-line)
+
+;; auto-fill-mode promp
+
+;; bindings to allow for special backward-kill-word
+(global-set-key [remap kill-word] 'defunkt-kill-word)
+(global-set-key [remap backward-kill-word] 'defunkt-backward-kill-word)
+
+;; Duplicate line?
+(global-set-key [C-return] 'defunkt-duplicate-line)
+#+END_SRC
+
+** Indentation Levels
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'css-mode-hook
+            (lambda ()
+              (setq css-basic-offset 2)))
+
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+#+END_SRC

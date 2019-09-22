@@ -1,0 +1,31 @@
+#+TITLE: Starter Kit Clojure
+#+OPTIONS: toc:nil num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Starter Kit Clojure
+  :PROPERTIES:
+  :results:  silent
+  :END:
+
+Support for editing Clojure.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'clojure-mode)
+
+    (defvar om-methods
+      (list 'render
+            'render-state
+            'init-state
+            'will-mount
+            'did-mount
+            'should-update
+            'will-receive-props
+            'will-update
+            'display-name
+            'will-unmount)
+      "Libraries that should be installed by default.")
+
+    (dolist (s om-methods)
+      (put-clojure-indent s 'defun))
+#+END_SRC

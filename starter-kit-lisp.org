@@ -12,7 +12,7 @@ Support for editing list dialects including [[* Emacs Lisp][Emacs Lisp]], [[* Sc
    :CUSTOM_ID: keys
    :END:
 #+name: starter-kit-define-lisp-keys
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
   ;; (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
@@ -59,23 +59,25 @@ back, =C-M-u= up, =C-M-d= down)
    :END:
 
 #+begin_src emacs-lisp
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'run-starter-kit-coding-hook)
-(add-hook 'emacs-lisp-mode-hook 'starter-kit-remove-elc-on-save)
-;; (add-hook 'emacs-lisp-mode-hook 'idle-highlight)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-paredit)
-(define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'emacs-lisp-mode-hook 'run-starter-kit-coding-hook)
+  (add-hook 'emacs-lisp-mode-hook 'starter-kit-remove-elc-on-save)
+  ;; (add-hook 'emacs-lisp-mode-hook 'idle-highlight)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-paredit)
+  (add-hook 'clojurescript-mode-hook 'turn-on-paredit)
+  (add-hook 'cider-repl-mode-hook 'turn-on-paredit)
+  (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
 
-(defun starter-kit-remove-elc-on-save ()
-  "If you're saving an elisp file, likely the .elc is no longer valid."
-  (make-local-variable 'after-save-hook)
-  (add-hook 'after-save-hook
-            (lambda ()
-              (if (file-exists-p (concat buffer-file-name "c"))
-                  (delete-file (concat buffer-file-name "c"))))))
+  (defun starter-kit-remove-elc-on-save ()
+    "If you're saving an elisp file, likely the .elc is no longer valid."
+    (make-local-variable 'after-save-hook)
+    (add-hook 'after-save-hook
+              (lambda ()
+                (if (file-exists-p (concat buffer-file-name "c"))
+                    (delete-file (concat buffer-file-name "c"))))))
 
-(font-lock-add-keywords 'emacs-lisp-mode
-			'(("(\\|)" . 'starter-kit-paren-face)))
+  (font-lock-add-keywords 'emacs-lisp-mode
+                          '(("(\\|)" . 'starter-kit-paren-face)))
 #+end_src
 
 ** Clojure
@@ -86,24 +88,50 @@ back, =C-M-u= up, =C-M-d= down)
 #+begin_src emacs-lisp
   (require 'clojure-mode)
 
+  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljc\\'" . clojure-mode))
+
   (add-hook 'clojure-mode-hook 'run-starter-kit-coding-hook)
-  
+
+  ;; (add-hook 'clojure-mode-hook 'flymake-mode-on)
+
   (font-lock-add-keywords 'clojure-mode
                           '(("(\\|)" . 'starter-kit-paren-face)))
-  
+
   (define-key clojure-mode-map (kbd "C-c v") 'slime-eval-buffer)
   (define-key clojure-mode-map (kbd "C-c C-v") 'slime-eval-buffer)
-  
+
+
+  ;; SLIME setup:
+  (eval-after-load "slime"
+    `(progn
+       (slime-setup '(slime-repl))
+       (slime-setup '(slime-fuzzy))
+       (custom-set-variables
+        '(inhibit-splash-screen t)
+        '(slime-complete-symbol*-fancy t)
+        '(slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+        '(slime-startup-animation nil)
+        '(slime-lisp-implementations '((sbcl ("sbcl")))))))
+
+  ;; Stop SLIME’s REPL from grabbing DEL,
+  ;; which is annoying when backspacing over a ‘(‘
+  (defun override-slime-repl-bindings-with-paredit ()
+    (define-key slime-repl-mode-map
+      (read-kbd-macro paredit-backward-delete-key) nil))
+
+  (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
+
   (defface starter-kit-clojure-trace-face
-     '((((class color) (background dark))
-        (:foreground "grey50"))
-       (((class color) (background light))
-        (:foreground "grey55")))
-     "Face used to dim parentheses."
-     :group 'starter-kit-faces)
-  
+    '((((class color) (background dark))
+       (:foreground "grey50"))
+      (((class color) (background light))
+       (:foreground "grey55")))
+    "Face used to dim parentheses."
+    :group 'starter-kit-faces)
+
   (setq starter-kit-clojure-trace-face 'starter-kit-clojure-trace-face)
-  
+
   ;; This will make relevant lines stand out more in stack traces
   (defun sldb-font-lock ()
     (font-lock-add-keywords nil
@@ -115,12 +143,12 @@ back, =C-M-u= up, =C-M-d= down)
                                1 starter-kit-clojure-trace-face)
                               ("\\[\\([A-Z]+\\)\\]"
                                1 font-lock-function-name-face))))
-  
+
   (add-hook 'sldb-mode-hook 'sldb-font-lock)
-  
+
   (defun slime-jump-to-trace (&optional on)
     "Jump to the file/line that the current stack trace line references.
-  Only works with files in your project root's src/, not in dependencies."
+    Only works with files in your project root's src/, not in dependencies."
     (interactive)
     (save-excursion
       (beginning-of-line)
@@ -131,24 +159,24 @@ back, =C-M-u= up, =C-M-d= down)
         (find-file (format "%s/src/%s.clj" project-root
                            (mapconcat 'identity ns-path "/")))
         (goto-line line))))
-  
+
   (eval-after-load 'slime
     '(progn
        (defalias 'sldb-toggle-details 'slime-jump-to-trace)
        (defun sldb-prune-initial-frames (frames)
          "Show all stack trace lines by default."
          frames)))
-  
+
   (eval-after-load 'find-file-in-project
     '(add-to-list 'ffip-patterns "*.clj"))
-  
+
   ;; You might like this, but it's a bit disorienting at first:
   (add-hook 'clojure-mode-hook 'turn-on-paredit)
-  
+
   (defun clojure-project (path)
     "Setup classpaths for a clojure project and starts a new SLIME session.
-  
-  Kills existing SLIME session, if any."
+
+    Kills existing SLIME session, if any."
     (interactive (list
                   (ido-read-directory-name
                    "Project root: "
@@ -172,7 +200,6 @@ back, =C-M-u= up, =C-M-d= down)
                            slime-lisp-implementations)))
     (save-window-excursion
       (slime)))
-  
 #+end_src
 
 #+results:
@@ -194,10 +221,52 @@ pretty \lambda's in clojure
    :END:
 
 #+begin_src emacs-lisp
-(add-hook 'scheme-mode-hook 'run-starter-kit-coding-hook)
-;; (add-hook 'scheme-mode-hook 'idle-highlight)
-(font-lock-add-keywords 'scheme-mode
-			'(("(\\|)" . 'starter-kit-paren-face)))
+  (add-hook 'scheme-mode-hook 'run-starter-kit-coding-hook)
+  (add-hook 'scheme-mode-hook 'turn-on-paredit)
+  (setq geiser-active-implementations '(racket))
+  (setq geiser-scheme-implementation "/Users/sritchie/bin/mit-scheme")
+
+  (add-hook 'scheme-mode-hook
+            (lambda ()
+              (define-key scheme-mode-map (kbd "C-c l") "lambda")
+              (define-key inferior-scheme-mode-map (kbd "C-c l") "lambda")))
+
+  (when (window-system)
+    (add-hook 'scheme-mode-hook 'pretty-lambdas-haskell)
+    (add-hook 'inferior-scheme-mode-hook 'pretty-lambdas-haskell))
+  (require 'quack)
+  ;; (add-hook 'scheme-mode-hook 'idle-highlight)
+  (font-lock-add-keywords 'scheme-mode
+                          '(("(\\|)" . 'starter-kit-paren-face)))
+
+
+  ;; Mechanics
+
+  (defun mechanics ()
+    (interactive)
+    (run-scheme "mech-scheme"))
+
+  ;; Friendly font-lock from https://gist.github.com/dleslie/1257860
+  (custom-set-faces
+   '(quack-about-face ((t (:inherit font-lock-warning))))
+   '(quack-about-title-face ((t (:inherit font-lock-warning :weight bold :height 2.0))))
+   '(quack-banner-face ((t (:inherit font-lock-warning-face))))
+   '(quack-pltfile-dir-face ((t (:inherit dired-face-directory))))
+   '(quack-pltfile-file-face ((t (:inherit dired-face-file ))))
+   '(quack-pltfile-prologue-face ((((class color)) (:inherit dired-face-boring))))
+   '(quack-pltish-class-defn-face ((((class color) (background dark)) (:inherit font-lock-type-face))))
+   '(quack-pltish-colon-keyword-face ((t (:inherit font-lock-keyword-face))))
+   '(quack-pltish-comment-face ((((class color) (background dark)) (:inherit font-lock-comment-face))))
+   '(quack-pltish-defn-face ((t (:inherit font-lock-function-name-face))))
+   '(quack-pltish-keyword-face ((t (:inherit font-lock-keyword-face))))
+   '(quack-pltish-module-defn-face ((((class color) (background dark)) (:inherit font-lock-type-face :weight bold))))
+   '(quack-pltish-paren-face ((((class color) (background dark)) (:inherit font-lock-operator-face))))
+   '(quack-pltish-selfeval-face ((((class color) (background dark)) (:inherit font-lock-string-face))))
+   '(quack-threesemi-h1-face ((t (:inherit font-lock-doc-string-face :weight bold :height 1.4))))
+   '(quack-threesemi-h2-face ((t (:inherit font-lock-doc-string-face :weight bold :height 1.2))))
+   '(quack-threesemi-h3-face ((t (:inherit font-lock-doc-string-face :weight bold))))
+   '(quack-threesemi-semi-face ((((class color) (background dark)) (:inherit font-lock-doc-face))))
+   '(quack-threesemi-text-face ((((class color) (background dark)) (:inherit font-lock-doc-string-face)))))
 #+end_src
 
 ** Common Lisp
@@ -206,9 +275,9 @@ pretty \lambda's in clojure
    :END:
 
 #+begin_src emacs-lisp
-(add-hook 'lisp-mode-hook 'run-starter-kit-coding-hook)
-;; (add-hook 'lisp-mode-hook 'idle-highlight)
-(add-hook 'lisp-mode-hook 'turn-on-paredit)
-(font-lock-add-keywords 'lisp-mode
-			'(("(\\|)" . 'starter-kit-paren-face)))
+  (add-hook 'lisp-mode-hook 'run-starter-kit-coding-hook)
+  ;; (add-hook 'lisp-mode-hook 'idle-highlight)
+  (add-hook 'lisp-mode-hook 'turn-on-paredit)
+  (font-lock-add-keywords 'lisp-mode
+                          '(("(\\|)" . 'starter-kit-paren-face)))
 #+end_src

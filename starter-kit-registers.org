@@ -23,6 +23,9 @@ You should add registers here for the files you edit most often.
                            ((file-exists-p el)  el)
                            (t dir)))))
            (?s (file . ,(concat starter-kit-dir "starter-kit.org")))
-           (?r (file . ,(concat starter-kit-dir "starter-kit-registers.org")))))
+           (?b (file . ,(concat (getenv "HOME") "/.bashrc")))
+           (?n (file . ,(concat (getenv "HOME") "/Dropbox/org/notes.org")))
+           (?r (file . ,(concat starter-kit-dir "starter-kit-registers.org")))
+           ))
     (set-register (car r) (cadr r)))
 #+end_src
